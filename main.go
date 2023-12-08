@@ -29,7 +29,7 @@ func main() {
 
 	records = append([][]string{labels}, records...)
 
-	file, err = os.Create("sorted_data.csv")
+	file, err = os.Create("arquivo-destino.csv")
 	if err != nil {
 		fmt.Println(err)
 	}

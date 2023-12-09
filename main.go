@@ -7,7 +7,8 @@ import (
 )
 
 func main() {
-	file, err := os.Open("arquivo-de-origem.csv")
+	args := os.Args[1:]
+	file, err := os.Open(args[0])
 	checkErr(err)
 
 	reader := csv.NewReader(file)
@@ -19,7 +20,7 @@ func main() {
 	sortNames(records)
 	records = append([][]string{labels}, records...)
 
-	writeOutputFile(records)
+	writeOutputFile(records, args[1])
 }
 
 func checkErr(err error) {
@@ -34,8 +35,8 @@ func sortNames(records [][]string) {
 	})
 }
 
-func writeOutputFile(records [][]string) {
-	file, err := os.Create("arquivo-destino.csv")
+func writeOutputFile(records [][]string, filename string) {
+	file, err := os.Create(filename)
 	checkErr(err)
 
 	writer := csv.NewWriter(file)

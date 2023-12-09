@@ -17,7 +17,7 @@ func main() {
 	records, err := reader.ReadAll()
 	checkErr(err)
 
-	sortNames(records)
+	sortByAgeAndName(records)
 	records = append([][]string{labels}, records...)
 
 	writeOutputFile(records, args[1])
@@ -29,7 +29,10 @@ func checkErr(err error) {
 	}
 }
 
-func sortNames(records [][]string) {
+func sortByAgeAndName(records [][]string) {
+	sort.Slice(records, func(i, j int) bool {
+		return records[i][1] > records[j][1]
+	})
 	sort.Slice(records, func(i, j int) bool {
 		return records[i][0] < records[j][0]
 	})

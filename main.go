@@ -2,37 +2,41 @@ package main
 
 import (
 	"encoding/csv"
-	"fmt"
 	"os"
 	"sort"
 )
 
 func main() {
-	file, err := os.Open("data.csv")
-	if err != nil {
-		fmt.Println(err)
-	}
+	file, err := os.Open("arquivo-de-origem.csv")
+	checkErr(err)
 
 	reader := csv.NewReader(file)
 	labels, err := reader.Read()
-	if err != nil {
-		fmt.Println(err)
-	}
+	checkErr(err)
 	records, err := reader.ReadAll()
-	if err != nil {
-		fmt.Println(err)
-	}
+	checkErr(err)
 
+	sortNames(records)
+	records = append([][]string{labels}, records...)
+
+	writeOutputFile(records)
+}
+
+func checkErr(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
+func sortNames(records [][]string) {
 	sort.Slice(records, func(i, j int) bool {
 		return records[i][0] < records[j][0]
 	})
+}
 
-	records = append([][]string{labels}, records...)
-
-	file, err = os.Create("arquivo-destino.csv")
-	if err != nil {
-		fmt.Println(err)
-	}
+func writeOutputFile(records [][]string) {
+	file, err := os.Create("arquivo-destino.csv")
+	checkErr(err)
 
 	writer := csv.NewWriter(file)
 	writer.WriteAll(records)
